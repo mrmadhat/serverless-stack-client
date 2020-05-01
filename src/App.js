@@ -9,6 +9,7 @@ import "./App.css"
 
 import Routes from "./Routes"
 import { onError } from "./libs/errorLib"
+import ErrorBoundary from "./components/ErrorBoundary"
 
 function App() {
   const history = useHistory()
@@ -41,45 +42,47 @@ function App() {
   }
 
   return (
-  !isAuthenticating && (
-    <div className="App container">
-      <Navbar fluid collapseOnSelect>
-        <Navbar.Header>
-          <Navbar.Brand>
-            <Link to="/">Scratch</Link>
-          </Navbar.Brand>
-          <Navbar.Toggle />
-        </Navbar.Header>
-        <Navbar.Collapse>
-          <Nav pullRight>
-            {isAuthenticated ? (
-              <>
-                <LinkContainer to="/settings">
-                  <NavItem>Settings</NavItem>
-                </LinkContainer>
-                <NavItem onClick={handleLogout}>Logout</NavItem>
-              </>
-            ) : (
-              <>
-                <LinkContainer to="/signup">
-                  <NavItem>Signup</NavItem>
-                </LinkContainer>
-                <LinkContainer to="/login">
-                  <NavItem>Login</NavItem>
-                </LinkContainer>
-              </>
-            )}
-          </Nav>
-        </Navbar.Collapse>
-      </Navbar>
-      <AppContext.Provider
-        value={{ isAuthenticated, userHasAuthenticated }}
-      >
-        <Routes />
-      </AppContext.Provider>
-    </div>
+    !isAuthenticating && (
+      <div className="App container">
+        <Navbar fluid collapseOnSelect>
+          <Navbar.Header>
+            <Navbar.Brand>
+              <Link to="/">Scratch</Link>
+            </Navbar.Brand>
+            <Navbar.Toggle />
+          </Navbar.Header>
+          <Navbar.Collapse>
+            <Nav pullRight>
+              {isAuthenticated ? (
+                <>
+                  <LinkContainer to="/settings">
+                    <NavItem>Settings</NavItem>
+                  </LinkContainer>
+                  <NavItem onClick={handleLogout}>Logout</NavItem>
+                </>
+              ) : (
+                <>
+                  <LinkContainer to="/signup">
+                    <NavItem>Signup</NavItem>
+                  </LinkContainer>
+                  <LinkContainer to="/login">
+                    <NavItem>Login</NavItem>
+                  </LinkContainer>
+                </>
+              )}
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+        <ErrorBoundary>
+          <AppContext.Provider
+            value={{ isAuthenticated, userHasAuthenticated }}
+          >
+            <Routes />
+          </AppContext.Provider>
+        </ErrorBoundary>
+      </div>
+    )
   )
-);
 }
 
 export default App
